@@ -1,5 +1,5 @@
 
-# （厦门大学健康打卡签到）
+# 厦门大学健康打卡签到
 ## 配置
 - 1、driver_path:chrome_driver 路径
 - 2、username、password:XMU用户名、密码
