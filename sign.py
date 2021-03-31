@@ -4,38 +4,25 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
+from datetime import datetime
 
 
-# 配置文件
-# 1、driver_path:chrome_driver 路径
-# 2、username、password:XMU用户名、密码
-# 3、SLEEP_TIME:每次点击延迟时间
+def sign(username, password):
 
+    def click(xpath, find_way=By.XPATH):
+        time.sleep(1)
+        try:
+            print(f"current_url:{driver.title}\t{driver.current_url}")
+            element = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((find_way, xpath))
+            )
+            element.click()
+        except Exception as e:  # TimeoutException
+            print("error")
+            raise e
+        return element
 
-driver_path = "C:/Users/Tsinghua/AppData/Local/CentBrowser/Application/chromedriver.exe"
-username = ""
-password = ""
-SLEEP_TIME = 2
-
-
-driver = webdriver.Chrome()
-
-
-def click(xpath, find_way=By.XPATH):
-    time.sleep(SLEEP_TIME)
-    try:
-        print(f"current_url:{driver.title}\t{driver.current_url}")
-        element = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((find_way, xpath))
-        )
-        element.click()
-    except Exception as e:  # TimeoutException
-        print("error")
-        raise e
-    return element
-
-
-def main():
+    driver = webdriver.Chrome("C:/Users/Tsinghua/AppData/Local/CentBrowser/Application/chromedriver.exe")
     home_url = "https://xmuxg.xmu.edu.cn/login#"
     driver.get(home_url)
 
@@ -51,6 +38,12 @@ def main():
     select = '//*[@id="select_1582538939790"]/div/div'
     yes = '/html/body/div[8]/ul/div/div[3]/li/label'
     save = '/html/body/div[1]/div/div/div/div/div[2]/div[1]/div/div/span/span'
+
+    # local_nation = '//*[@id="select_1611107962967"]/div/div'
+    # local_nation_select = '/html/body/div[8]/ul/div/div[3]/li[1]/label'
+
+    # province = '//*[@id="address_1582538163410"]/div/div/div/div'
+    # province_select  = '/html/body/div[8]/ul/div[2]/div[3]/li[15]/label'
 
     click(input_username).send_keys(username)
     click(input_password).send_keys(password)
@@ -70,18 +63,17 @@ def main():
         click(table)
         e = click(select)
         assert is_sign(e)
+
     print('finished')
     driver.quit()
+    return driver
 
 
 def is_sign(e):
+    print(f'\n\n{datetime.now()}')
     if '请选择' in e.text:
         print('\n' + '=' * 20 + "未打卡" + '=' * 20 + '\n')
         return False
     else:
         print('\n' + '=' * 20 + "已打卡" + '=' * 20 + '\n')
         return True
-
-
-if __name__ == '__main__':
-    main()
