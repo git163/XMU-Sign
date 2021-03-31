@@ -6,11 +6,14 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 from datetime import datetime
 
+SLEEP_TIME = 2
+
 
 def sign(username, password):
+    global SLEEP_TIME
 
     def click(xpath, find_way=By.XPATH):
-        time.sleep(1)
+        time.sleep(SLEEP_TIME)
         try:
             print(f"current_url:{driver.title}\t{driver.current_url}")
             element = WebDriverWait(driver, 10).until(
@@ -21,8 +24,8 @@ def sign(username, password):
             print("error")
             raise e
         return element
-
     driver = webdriver.Chrome("C:/Users/Tsinghua/AppData/Local/CentBrowser/Application/chromedriver.exe")
+
     home_url = "https://xmuxg.xmu.edu.cn/login#"
     driver.get(home_url)
 
@@ -39,17 +42,11 @@ def sign(username, password):
     yes = '/html/body/div[8]/ul/div/div[3]/li/label'
     save = '/html/body/div[1]/div/div/div/div/div[2]/div[1]/div/div/span/span'
 
-    # local_nation = '//*[@id="select_1611107962967"]/div/div'
-    # local_nation_select = '/html/body/div[8]/ul/div/div[3]/li[1]/label'
-
-    # province = '//*[@id="address_1582538163410"]/div/div/div/div'
-    # province_select  = '/html/body/div[8]/ul/div[2]/div[3]/li[15]/label'
-
     click(input_username).send_keys(username)
     click(input_password).send_keys(password)
     click(submit)
     click(health)
-    time.sleep(2)
+    time.sleep(SLEEP_TIME)
     driver.switch_to.window(driver.window_handles[-1])
 
     click(table)
