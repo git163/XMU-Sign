@@ -5,8 +5,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 from datetime import datetime
+from selenium.webdriver.chrome.options import Options
 
-SLEEP_TIME = 2
+SLEEP_TIME = 3
 
 
 def sign(username, password):
@@ -24,7 +25,17 @@ def sign(username, password):
             print("error")
             raise e
         return element
-    driver = webdriver.Chrome("C:/Users/Tsinghua/AppData/Local/CentBrowser/Application/chromedriver.exe")
+
+    options = Options()
+    options.add_argument('--headless')
+    options.add_experimental_option('excludeSwitches', ['enable-automation'])  # 绕过js检测
+    # 在chrome79版本之后，上面的实验选项已经不能屏蔽webdriver特征了
+    # 屏蔽webdriver特征
+    options.add_argument("--disable-blink-features")
+    options.add_argument('--log-level=3')
+
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    driver = webdriver.Chrome(options=options)
 
     home_url = "https://xmuxg.xmu.edu.cn/login#"
     driver.get(home_url)
